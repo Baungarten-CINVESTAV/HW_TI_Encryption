@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hardware Trojan Insertion with LLM &mdash; HW Trojan Insertion in Encryption Algorithms with LLM 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=359c27e9"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="DES LLM conversation" href="Chapter_4_2.html" />
+    <link rel="prev" title="Background" href="Chapter_3.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HW Trojan Insertion in Encryption Algorithms with LLM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Chapter_1.html">CSAW Competition: AI Hardware Attack Challenge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_2.html">Objective</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_3.html">Background</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hardware Trojan Insertion with LLM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#llm-conversation-flowchart">LLM Conversation Flowchart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-vulnerability-scoring-system-cvss-calculator">Common Vulnerability Scoring System (CVSS) Calculator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-trojan-insertion-for-des-algorithm">Hardware Trojan insertion for DES algorithm</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#llm-conversation">LLM conversation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testbench">Testbench</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-trojan-insertion-for-aes-algorithm">Hardware Trojan insertion for AES algorithm</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">LLM conversation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Testbench</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-trojan-insertion-for-sha-algorithm">Hardware Trojan insertion for SHA algorithm</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#try-it-yourself">Try it yourself!</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_2.html">DES LLM conversation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_3.html">AES LLM conversation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_5_0.html">Caravel Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_5.html">From RTL to GDSII</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_6.html">Caravel Integration</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HW Trojan Insertion in Encryption Algorithms with LLM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Hardware Trojan Insertion with LLM</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Chapter_4.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hardware-trojan-insertion-with-llm">
+<span id="chapter-4"></span><h1>Hardware Trojan Insertion with LLM<a class="headerlink" href="#hardware-trojan-insertion-with-llm" title="Permalink to this heading"></a></h1>
+<section id="llm-conversation-flowchart">
+<h2>LLM Conversation Flowchart<a class="headerlink" href="#llm-conversation-flowchart" title="Permalink to this heading"></a></h2>
+<p>Before delving into the LLM conversation flowchart, it’s crucial to understand the behavior of a Trojan and how it will be incorporated into the design. Equally important is having a good knowledge of the design that will house the Trojan. The method outlined for inserting Hardware Trojans using LLM necessitates access to the RTL code and could be at any point in the supply chain. It can be inserted either during the frontend phase in module creation or in the backend during the physical design phase.</p>
+<p>Fig. 4.1 illustrates the process of Hardware Trojan insertion. The initial step involves simplifying the Trojan’s design into its fundamental modules and components. It’s worth noting that LLM strictly adheres to ethical and legal guidelines, and any inquiries related to Trojan insertion will invariably receive a negative response.</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="_images/LLM_Flochart.png"><img alt="_images/LLM_Flochart.png" src="_images/LLM_Flochart.png" style="width: 432.8px; height: 784.8000000000001px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 4.1: LLM conversation flowchart</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Once the Trojan has been simplified into its basic modules, the next step involves writing the initial prompt. Subsequently, the LLM may or may not provide the requested code. If the provided code is satisfactory, it should be synthesized. If the module is synthesizable, the following prompt will request the testbench for the module. However, if the code is unsatisfactory or non-synthesizable, the subsequent prompt should be more specific or provide information regarding the synthesizability, if it’s not readily fixable. It is advisable not to repeatedly iterate the same issues more than four times within the same chat session.</p>
+<p>These aforementioned steps should be followed for each basic module of the Trojan. Once all the components are constructed, the next prompt entails integrating the Trojan with the target design. To achieve successful integration, it is recommended to be precise with signal connections. If the integration is successful, the subsequent step is to test the Trojan. Similar to the previous module, you can craft a prompt to generate the testbench.</p>
+</section>
+<section id="common-vulnerability-scoring-system-cvss-calculator">
+<h2>Common Vulnerability Scoring System (CVSS) Calculator<a class="headerlink" href="#common-vulnerability-scoring-system-cvss-calculator" title="Permalink to this heading"></a></h2>
+<p>The Common Vulnerability Scoring System (CVSS) score was calculated in <a class="reference external" href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator">https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator</a> with the following parameters, this Trojan can be used in multiples encryption algorithms so the CVSS is the same.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/cvss.PNG"><img alt="_images/cvss.PNG" src="_images/cvss.PNG" style="width: 655.0px; height: 192.0px;" /></a>
+</figure>
+</section>
+<section id="hardware-trojan-insertion-for-des-algorithm">
+<h2>Hardware Trojan insertion for DES algorithm<a class="headerlink" href="#hardware-trojan-insertion-for-des-algorithm" title="Permalink to this heading"></a></h2>
+<p>In this section, we will provide a comprehensive explanation of the development process for a Trojan designed to store encryption keys utilized in the DES algorithm through the use of LLM, the base DES RTL code was obtained from <a class="reference external" href="https://opencores.org/projects/des">https://opencores.org/projects/des</a> . The fundamental module for this Trojan is a bank of registers specifically engineered to retain the keys employed by the DES algorithm. This register bank is structured to save and retrieve the keys in a queuing sequence. Every time the DES algorithm encrypts data, it will preserve the key employed for that encryption process. To retrieve data from the system, the key parameter must be set as “0x54726F6A616E41” (TrojanA), and the data should be designated as “0x0000000000000000”.</p>
+<section id="llm-conversation">
+<h3>LLM conversation<a class="headerlink" href="#llm-conversation" title="Permalink to this heading"></a></h3>
+<p>To see the whole conversation pleas refears to <a class="reference internal" href="Chapter_4_2.html#chapter-4-2"><span class="std std-ref">DES LLM conversation</span></a></p>
+</section>
+<section id="testbench">
+<h3>Testbench<a class="headerlink" href="#testbench" title="Permalink to this heading"></a></h3>
+<p>Following the conversation sequence, the first testbench requested was the bank of registers with FIFO management.</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="_images/TB_fifo.JPG"><img alt="_images/TB_fifo.JPG" src="_images/TB_fifo.JPG" style="width: 708.0px; height: 206.4px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 4.2: Testbench of the module fifo_8x56, with orange the write input data, with blue the read output data.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>With the Trojan insertion and modification developed by the AI, the functionality of the DES algorithm changed.</p>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="_images/Des_Diagram_Trojan.png"><img alt="_images/Des_Diagram_Trojan.png" src="_images/Des_Diagram_Trojan.png" style="width: 450.40000000000003px; height: 440.8px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 4.3: Flow Diagram of DES algorithm for encrypting data with Trojan insertion.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>The testbench of the DES algorithm with the Trojan can be appreciated in the following figure:</p>
+<figure class="align-center" id="id6">
+<a class="reference internal image-reference" href="_images/TB_DES.JPG"><img alt="_images/TB_DES.JPG" src="_images/TB_DES.JPG" style="width: 1038.6px; height: 175.2px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 4.4: Testbench of the module DES, with yellow the Key and Text data, with blue the cipher text.</span><a class="headerlink" href="#id6" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="hardware-trojan-insertion-for-aes-algorithm">
+<h2>Hardware Trojan insertion for AES algorithm<a class="headerlink" href="#hardware-trojan-insertion-for-aes-algorithm" title="Permalink to this heading"></a></h2>
+<p>In this section, we will provide a comprehensive explanation of the development process for a Trojan designed to store encryption keys utilized in the AES algorithm through the use of LLM. The base AES RTL code was obtained from <a class="reference external" href="https://opencores.org/projects/systemcaes">https://opencores.org/projects/systemcaes</a>.</p>
+<p>The fundamental module for this Trojan is a bank of registers specifically engineered to retain the keys employed by the AES algorithm. This register bank is structured to save and retrieve the keys in a queuing sequence. Every time the algorithm encrypts data, it will preserve the key that was employed for that encryption process. To retrieve data from the system, the key parameter must be set as “0x54726F6A616E41637469766174696F6E” (TrojanActivation), and the data should be designated as “0x00000000000000000000000000000000”.</p>
+<section id="id1">
+<h3>LLM conversation<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>To see the whole conversation pleas refears to <a class="reference internal" href="Chapter_4_3.html#chapter-4-3"><span class="std std-ref">AES LLM conversation</span></a></p>
+</section>
+<section id="id2">
+<h3>Testbench<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<p>Following the conversation sequence, the first testbench requested was for the bank of registers with FIFO management. Fig. 4.5 illustrates that testbench and how the data is written and read.</p>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="_images/TB_fifo_aes.JPG"><img alt="_images/TB_fifo_aes.JPG" src="_images/TB_fifo_aes.JPG" style="width: 808.8px; height: 252.6px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 4.5: Testbench of the module FifoBankRegister.</span><a class="headerlink" href="#id7" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>With the Trojan insertion and modification developed by the AI, the functionality of the AES algorithm changed. Fig. 4.6 shows the new flow with the Trojan insertion, with the red line representing the modifications and behavior of the Trojan.</p>
+<figure class="align-center" id="id8">
+<a class="reference internal image-reference" href="_images/AES_Diagram_Trojan.png"><img alt="_images/AES_Diagram_Trojan.png" src="_images/AES_Diagram_Trojan.png" style="width: 402.40000000000003px; height: 509.6px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 4.6: Flow Diagram of the AES algorithm for encrypting data with Trojan insertion.</span><a class="headerlink" href="#id8" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>The testbench of the AES algorithm with the Trojan can be appreciated in Fig. 4.7. The Key, Text, and ciphertext signals are shown as ASCII data type. The testbench was made to switch between a correctly working and the modified AES algorithm. The next 8 rounds are used to read the keys saved by the Trojan.</p>
+<figure class="align-center" id="id9">
+<a class="reference internal image-reference" href="_images/TB_AES.JPG"><img alt="_images/TB_AES.JPG" src="_images/TB_AES.JPG" style="width: 813.0px; height: 95.39999999999999px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 4.7: Testbench of the module AES, with yellow representing the Key and Text data, and blue representing the ciphertext.</span><a class="headerlink" href="#id9" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="hardware-trojan-insertion-for-sha-algorithm">
+<h2>Hardware Trojan insertion for SHA algorithm<a class="headerlink" href="#hardware-trojan-insertion-for-sha-algorithm" title="Permalink to this heading"></a></h2>
+<section id="try-it-yourself">
+<h3>Try it yourself!<a class="headerlink" href="#try-it-yourself" title="Permalink to this heading"></a></h3>
+<p>Utilizing a commercially available LLMs like ChatGPT (<a class="reference external" href="https://chat.openai.com/">https://chat.openai.com/</a>), Bard (<a class="reference external" href="https://bard.google.com/chat">https://bard.google.com/chat</a>), or Bing (<a class="reference external" href="https://bing.com">https://bing.com</a>), in conjunction with the SHA encryptor accessible at <a class="reference external" href="https://opencores.org/projects/sha1">https://opencores.org/projects/sha1</a> , you can embark on the task of implementing your own Trojan. This malicious hardware is designed to capture and store the most recent encryption keys employed.</p>
+<p>Adhere to the conversational structure outlined in Fig. 4.1, and make use of the provided prompts as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>User:
+
+I’m working with a SHA Verilog code, and I need to save the last 8 keys. Let’s work together to complete this task.
+
+Start creating a Verilog code for a bank register. This bank must contain 8 addresses with a data width of 56 bits, and the bank register must work like a FIFO.
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">User</span><span class="p">:</span>
+
+<span class="n">I</span> <span class="n">want</span> <span class="n">the</span> <span class="n">FIFO</span> <span class="n">memory</span> <span class="n">to</span> <span class="k">continue</span> <span class="n">working</span> <span class="n">even</span> <span class="k">if</span> <span class="n">the</span> <span class="n">memory</span> <span class="ow">is</span> <span class="n">full</span><span class="o">.</span>
+
+<span class="ow">or</span>
+
+<span class="n">User</span><span class="p">:</span>
+
+<span class="n">If</span> <span class="n">the</span> <span class="n">FIFO</span> <span class="ow">is</span> <span class="n">full</span><span class="p">,</span> <span class="n">it</span> <span class="n">must</span> <span class="k">return</span> <span class="n">to</span> <span class="n">address</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">rewrite</span> <span class="n">the</span> <span class="n">data</span><span class="o">.</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">User</span><span class="p">:</span>
+
+<span class="n">Develop</span> <span class="n">the</span> <span class="n">testbench</span> <span class="k">for</span> <span class="n">this</span> <span class="n">module</span><span class="o">.</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>User:
+
+This is the verilog code of the SHA algorithm:
+     &lt;Insert SHA verilog code&gt;
+Inside this module, insert the &lt;Insert_module_name&gt; module. Connect the &lt;SHA_signal_name&gt; signal to the &lt;FIFO_signal_name&gt; signal, and connect &lt;SHA_signal_name&gt; to &lt;FIFO_signal_name&gt; . The output &lt;SHA_output_signal_name&gt; of SHA must be multiplexed to either &lt;Normal_SHA_Output&gt; or &lt;FIFO_Output&gt; of the bank register. The condition to connect &lt;SHA_output_signal_name&gt; with &lt;FIFO_Output&gt; should be when &lt;key_input_name&gt; is equal to “128’h54726F6A616E41637469766174696F6E” and &lt;data_input_name&gt; is equal to 128’d0.
+
+or
+
+&lt;Write the name of the implicit connections here&gt;
+like:
+fifo_8x56 | des
+ clk -&gt; clk
+ reset -&gt; reset
+ wr_en -&gt; decrypt==0 &amp;&amp; roundSel==4’b0001
+ rd_en -&gt; if(key==56’h54726F6A616E41 &amp;&amp; desIn==64’d0)
+ wr_data -&gt; key
+ rd_data -&gt;
+ fifo_empty -&gt; N/A
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>User:
+
+Create a testbench for the SHA module called “TB_SHA.”
+</pre></div>
+</div>
+<p>Please be mindful that all AI systems operate in strict accordance with ethical guidelines and legal restrictions. Consequently, refrain from using terms such as ‘Trojan,’ ‘Malicious,’ or any language associated with illegal activities or actions that facilitate such activities will gives a irrelevant AI answer</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Chapter_3.html" class="btn btn-neutral float-left" title="Background" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Chapter_4_2.html" class="btn btn-neutral float-right" title="DES LLM conversation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Emilio Baungarten.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

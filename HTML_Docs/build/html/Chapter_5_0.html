@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caravel Architecture &mdash; HW Trojan Insertion in Encryption Algorithms with LLM 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=359c27e9"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="From RTL to GDSII" href="Chapter_5.html" />
+    <link rel="prev" title="AES LLM conversation" href="Chapter_4_3.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HW Trojan Insertion in Encryption Algorithms with LLM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Chapter_1.html">CSAW Competition: AI Hardware Attack Challenge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_2.html">Objective</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_3.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4.html">Hardware Trojan Insertion with LLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_2.html">DES LLM conversation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_3.html">AES LLM conversation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Caravel Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#harness-definition">Harness Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#management-area">Management Area</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-project-area">User Project Area</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start-for-user-projects">Quick Start for User Projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#digital-user-project">Digital User Project</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_5.html">From RTL to GDSII</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_6.html">Caravel Integration</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HW Trojan Insertion in Encryption Algorithms with LLM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Caravel Architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Chapter_5_0.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="caravel-architecture">
+<span id="chapter-5-0"></span><h1>Caravel Architecture<a class="headerlink" href="#caravel-architecture" title="Permalink to this heading"></a></h1>
+<p>Caravel is composed of the harness frame plus two wrappers for drop-in modules for the <em>management area</em> and <em>user project area</em>.</p>
+<section id="harness-definition">
+<h2>Harness Definition<a class="headerlink" href="#harness-definition" title="Permalink to this heading"></a></h2>
+<p>The harness itself contains the clocking module, DLL, user ID,
+housekeeping SPI, POR, and GPIO control.</p>
+<p>GPIO handling moved out of management SoC and into SPI.  SPI
+gets a wishbone interface;  the management SoC talks to the SPI
+through wishbone, not by taking over the 4-pin SPI interface.</p>
+<p>A new block like the ID has the mode at power-up for
+each GPIO.  Can be configured with a text file.  SPI pins are
+fixed for operation on startup.</p>
+<p>On power-up, the SPI automatically configures the
+GPIO.  Manual load is possible from both the SPI and from the
+wishbone bus.</p>
+<p>All functions within the harness but outside the management SoC
+are incorporated into one large module called “housekeeping”.
+This includes a number of registers for all the included
+functions, with a “front door” SPI interface connected to the
+padframe through GPIO pins 1 to 4, and a “back door” wishbone
+interface connected to the management SoC.  The management Soc
+reserves the memory block at 0x26000000 for the
+housekeeping module.  The housekeeping module exchanges data
+with the management SoC via an interface that uses the byte-
+wide SPI register data.  A small state machine reads four
+contiguous wishbone addresses and an address decoder determines
+the corresponding SPI register.  The state machine stalls the
+SoC until all four bytes have been handled before returning the
+acknowledge signal.</p>
+</section>
+<section id="management-area">
+<h2>Management Area<a class="headerlink" href="#management-area" title="Permalink to this heading"></a></h2>
+<p>The management area is a drop-in module implemented as a separate repo.
+It typically includes a RISC-V based SoC that includes a number of peripherals like timers, uart, and gpio.
+The management area runs firmware that can be used to:</p>
+<ul class="simple">
+<li><p>Configure User Project I/O pads</p></li>
+<li><p>Observe and control User Project signals (through on-chip logic
+analyzer probes)</p></li>
+<li><p>Control the User Project power supply</p></li>
+</ul>
+<p>The management area implements SRAM for the management SoC.</p>
+<p>The default instantiation for the management core can be found <a class="reference external" href="https://github.com/efabless/caravel_mgmt_soc_litex">here</a> .
+See documentation of the management core for further details.</p>
+</section>
+<section id="user-project-area">
+<h2>User Project Area<a class="headerlink" href="#user-project-area" title="Permalink to this heading"></a></h2>
+<p>This is the user space. It has a limited silicon area <code class="docutils literal notranslate"><span class="pre">2.92mm</span> <span class="pre">x</span> <span class="pre">3.52mm</span></code> as well as a fixed number of I/O pads <code class="docutils literal notranslate"><span class="pre">38</span></code> and power pads <code class="docutils literal notranslate"><span class="pre">4</span></code>.</p>
+<p>The user space has access to the following utilities provided by the management SoC:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">38</span></code> IO Ports</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">128</span></code> Logic analyzer probes</p></li>
+<li><p>Wishbone port connection to the management SoC wishbone bus.</p></li>
+</ul>
+</section>
+<section id="quick-start-for-user-projects">
+<h2>Quick Start for User Projects<a class="headerlink" href="#quick-start-for-user-projects" title="Permalink to this heading"></a></h2>
+<p>Your area is the full user space, so feel free to add your
+project there or create a different macro and harden it separately then
+insert it into the <code class="docutils literal notranslate"><span class="pre">user_project_wrapper</span></code> for digital projects or insert it
+into <code class="docutils literal notranslate"><span class="pre">user_project_analog_wrapper</span></code> for analog projects.</p>
+</section>
+<section id="digital-user-project">
+<h2>Digital User Project<a class="headerlink" href="#digital-user-project" title="Permalink to this heading"></a></h2>
+<p>If you are building a digital project for the user space, check a sample project at  <a class="reference external" href="https://github.com/efabless/caravel_user_project">caravel_user_project</a>.</p>
+<p>If you will use OpenLANE to harden your design, go through the instructions in this <a class="reference external" href="https://github.com/efabless/caravel/blob/master/openlane/README.rst">README</a>.</p>
+<p>Digital user projects should adhere the following requirements:</p>
+<ul class="simple">
+<li><p>Top module is named <code class="docutils literal notranslate"><span class="pre">user_project_wrapper</span></code></p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">user_project_wrapper</span></code> adheres to the pin order defined at <a class="reference external" href="https://github.com/efabless/caravel/blob/master/openlane/user_project_wrapper_empty/pin_order.cfg">Digital Wrapper Pin Order</a>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">user_project_wrapper</span></code> adheres to the fixed design configurations at <a class="reference external" href="https://github.com/efabless/caravel/blob/master/openlane/user_project_wrapper_empty/fixed_wrapper_cfgs.tcl">Digital Wrapper Fixed Configuration</a>.</p></li>
+<li><p>The user project repository adheres to the <a class="reference external" href="#required-directory-structure">Required Directory Structure</a>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Chapter_4_3.html" class="btn btn-neutral float-left" title="AES LLM conversation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Chapter_5.html" class="btn btn-neutral float-right" title="From RTL to GDSII" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Emilio Baungarten.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

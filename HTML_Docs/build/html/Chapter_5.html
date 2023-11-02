@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>From RTL to GDSII &mdash; HW Trojan Insertion in Encryption Algorithms with LLM 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=359c27e9"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Caravel Integration" href="Chapter_6.html" />
+    <link rel="prev" title="Caravel Architecture" href="Chapter_5_0.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HW Trojan Insertion in Encryption Algorithms with LLM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Chapter_1.html">CSAW Competition: AI Hardware Attack Challenge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_2.html">Objective</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_3.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4.html">Hardware Trojan Insertion with LLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_2.html">DES LLM conversation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_3.html">AES LLM conversation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_5_0.html">Caravel Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">From RTL to GDSII</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#des-without-trojan-insertion">DES Without Trojan Insertion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#des-with-trojan-insertion">DES With Trojan Insertion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aes-without-trojan-insertion">AES Without Trojan Insertion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aes-with-trojan-insertion">AES With Trojan Insertion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_6.html">Caravel Integration</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HW Trojan Insertion in Encryption Algorithms with LLM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">From RTL to GDSII</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Chapter_5.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="from-rtl-to-gdsii">
+<span id="chapter-5"></span><h1>From RTL to GDSII<a class="headerlink" href="#from-rtl-to-gdsii" title="Permalink to this heading"></a></h1>
+<ol class="arabic">
+<li><p>To start the project you first need to create a new repository based on the <a class="reference external" href="https://github.com/efabless/caravel_user_project/">caravel_user_project</a> template and make sure your repo is public and includes a README.</p>
+<ul>
+<li><p>Follow <a class="reference external" href="https://github.com/efabless/caravel_user_project/generate">https://github.com/efabless/caravel_user_project/generate</a> to create a new repository.</p></li>
+<li><p>Clone the reposity using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;your<span class="w"> </span>github<span class="w"> </span>repo<span class="w"> </span>URL&gt;
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>To setup your local environment run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>&lt;project_name&gt;<span class="w"> </span><span class="c1"># project_name is the name of your repo</span>
+
+<span class="c1"># export the PDK variant depending on your shuttle, if you don&#39;t know leave it to the default</span>
+
+<span class="c1"># for sky130 MPW shuttles....</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PDK</span><span class="o">=</span>sky130A
+
+<span class="c1"># for the gf180 GFMPW shuttles...</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PDK</span><span class="o">=</span>gf180mcuC
+
+
+
+make<span class="w"> </span>setup
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>This command will setup your environment by installing the following:
+- caravel_lite (a lite version of caravel),
+- management core for simulation,
+- openlane to harden your design,
+- pdk.</p></li>
+</ul>
+</li>
+</ol>
+<section id="des-without-trojan-insertion">
+<h2>DES Without Trojan Insertion<a class="headerlink" href="#des-without-trojan-insertion" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Now you can start hardening your design</p>
+<ul>
+<li><p>To start hardening you project you need:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>RTL verilog model for your design for OpenLane to harden, The DES algorithm can be found at: <a class="reference external" href="https://opencores.org/projects/des">https://opencores.org/projects/des</a></p></li>
+</ul>
+<p>The verilog files must be located in the directory <code class="docutils literal notranslate"><span class="pre">verilog/rtl/DES/</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>verilog/rtl/DES
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>A subdirectory for each macro in your project under <code class="docutils literal notranslate"><span class="pre">openlane/</span></code> directory, each subdirectory should include openlane configuration files for the macro.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>openlane/DES
+touch<span class="w"> </span>openlane/DES/config.json
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<p>The <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file required for the execution of the RTL-to-GDSII flow for the DES algorithm encompasses the following crucial settings:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w"> </span><span class="s2">&quot;DESIGN_NAME&quot;</span>:<span class="w"> </span><span class="s2">&quot;des&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;VERILOG_FILES&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/defines.v&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/crp.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/des.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/key_sel.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/sbox1.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/sbox3.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/sbox5.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/sbox7.v&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/des3.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/key_sel3.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/sbox2.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/sbox4.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/sbox6.v &quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/DES/sbox8.v&quot;</span>
+<span class="w"> </span><span class="o">]</span>,
+<span class="w"> </span><span class="s2">&quot;ROUTING_CORES&quot;</span>:<span class="w"> </span><span class="m">24</span>,
+<span class="w"> </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span>:<span class="w"> </span><span class="m">25</span>,
+<span class="w"> </span><span class="s2">&quot;CLOCK_PORT&quot;</span>:<span class="w"> </span><span class="s2">&quot;clk&quot;</span>,
+
+<span class="w"> </span><span class="s2">&quot;MAX_TRANSITION_CONSTRAINT&quot;</span>:<span class="w"> </span><span class="m">1</span>.5,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VPITCH&quot;</span>:<span class="w"> </span><span class="m">180</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HPITCH&quot;</span>:<span class="w"> </span><span class="m">180</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VOFFSET&quot;</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HOFFSET&quot;</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w"> </span><span class="s2">&quot;FP_SIZING&quot;</span>:<span class="w"> </span><span class="s2">&quot;absolute&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;RT_MAX_LAYER&quot;</span>:<span class="w"> </span><span class="s2">&quot;met4&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;DIE_AREA&quot;</span>:<span class="w"> </span><span class="s2">&quot;0 0 350 350&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;VDD_NETS&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">     </span><span class="s2">&quot;vccd1&quot;</span>
+<span class="w"> </span><span class="o">]</span>,
+<span class="w"> </span><span class="s2">&quot;GND_NETS&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">     </span><span class="s2">&quot;vssd1&quot;</span>
+<span class="w"> </span><span class="o">]</span>
+
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Execute the following command to harden the DES project</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>DES
+</pre></div>
+</div>
+</div></blockquote>
+<p>Upon executing the previous command, provided everything is functioning as expected, you should encounter the message “[SUCCESS]: Flow complete”. In such a case, navigate to the directory <code class="docutils literal notranslate"><span class="pre">openlane/DES/runs/&lt;Execution_Date&gt;</span></code>. Inside this directory, you will locate the folder containing the comprehensive reports and files generated by OpenLane. Among these files, you’ll find the GDSII file, which is visually represented in Fig. 6.1, displaying the GDS representation, and the resources utilized by the DES system’s implementation.</p>
+<figure class="align-center" id="id1">
+<img alt="_images/DES.PNG" src="_images/DES.PNG" />
+<figcaption>
+<p><span class="caption-text">Fig. 6.1: GDSII file of the DES algorithm without Trojan insertion.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="des-with-trojan-insertion">
+<h2>DES With Trojan Insertion<a class="headerlink" href="#des-with-trojan-insertion" title="Permalink to this heading"></a></h2>
+<p>To get the layout design with the Trojan, it is imperative to establish a new directory that accommodates the files created and altered by the artificial intelligence (AI).</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>verilog/rtl/DES_Trojan
+mkdir<span class="w"> </span>openlane/DES_Trojan
+touch<span class="w"> </span>openlane/DES_Trojan/config.json
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file required for the execution of the RTL-to-GDSII flow for the DES_Trojan algorithm encompasses the following crucial settings:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w">  </span><span class="s2">&quot;DESIGN_NAME&quot;</span>:<span class="w"> </span><span class="s2">&quot;des_Trojan&quot;</span>,
+<span class="w">  </span><span class="s2">&quot;DESIGN_IS_CORE&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">  </span><span class="s2">&quot;VERILOG_FILES&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">      </span><span class="s2">&quot;dir::../../verilog/rtl/defines.v&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;dir::../../verilog/rtl/DES_Trojan/*.v&quot;</span>
+<span class="w">  </span><span class="o">]</span>,
+<span class="w">  </span><span class="s2">&quot;ROUTING_CORES&quot;</span>:<span class="w"> </span><span class="m">24</span>,
+<span class="w">  </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span>:<span class="w"> </span><span class="m">25</span>,
+<span class="w">  </span><span class="s2">&quot;CLOCK_PORT&quot;</span>:<span class="w"> </span><span class="s2">&quot;clk&quot;</span>,
+
+<span class="w">  </span><span class="s2">&quot;MAX_TRANSITION_CONSTRAINT&quot;</span>:<span class="w"> </span><span class="m">1</span>.5,
+<span class="w">  </span><span class="s2">&quot;FP_PDN_VPITCH&quot;</span>:<span class="w"> </span><span class="m">180</span>,
+<span class="w">  </span><span class="s2">&quot;FP_PDN_HPITCH&quot;</span>:<span class="w"> </span><span class="m">180</span>,
+<span class="w">  </span><span class="s2">&quot;FP_PDN_VOFFSET&quot;</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w">  </span><span class="s2">&quot;FP_PDN_HOFFSET&quot;</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w">  </span><span class="s2">&quot;FP_SIZING&quot;</span>:<span class="w"> </span><span class="s2">&quot;absolute&quot;</span>,
+<span class="w">  </span><span class="s2">&quot;RT_MAX_LAYER&quot;</span>:<span class="w"> </span><span class="s2">&quot;met4&quot;</span>,
+<span class="w">   </span><span class="s2">&quot;DIE_AREA&quot;</span>:<span class="w"> </span><span class="s2">&quot;0 0 500 500&quot;</span>,
+<span class="w">  </span><span class="s2">&quot;VDD_NETS&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">      </span><span class="s2">&quot;vccd1&quot;</span>
+<span class="w">  </span><span class="o">]</span>,
+<span class="w">  </span><span class="s2">&quot;GND_NETS&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">      </span><span class="s2">&quot;vssd1&quot;</span>
+<span class="w">  </span><span class="o">]</span>
+
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Upon executing the previous command, provided everything is functioning as expected, you should encounter the message “[SUCCESS]: Flow complete”. In such a case, navigate to the directory <code class="docutils literal notranslate"><span class="pre">openlane/DES_Trojan/runs/&lt;Execution_Date&gt;</span></code>. Inside this directory, you will locate the folder containing the comprehensive reports and files generated by OpenLane. Among these files, you’ll find the GDSII file, which is visually represented in Fig. 6.2, displaying the GDS representation of the resources utilized by the DES_Trojan system’s implementation.</p>
+<figure class="align-center" id="id2">
+<img alt="_images/DES_T.PNG" src="_images/DES_T.PNG" />
+<figcaption>
+<p><span class="caption-text">Fig. 6.2: GDSII file of the DES algorithm with Trojan insertion.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="aes-without-trojan-insertion">
+<h2>AES Without Trojan Insertion<a class="headerlink" href="#aes-without-trojan-insertion" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Now you can start hardening your design</p>
+<ul>
+<li><p>To start hardening you project you need:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>RTL verilog model for your design for OpenLane to harden, The AES algorithm can be found at: <a class="reference external" href="https://opencores.org/projects/systemcaes">https://opencores.org/projects/systemcaes</a></p></li>
+</ul>
+<p>The verilog files must be located in the directory <code class="docutils literal notranslate"><span class="pre">verilog/rtl/AES/</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>verilog/rtl/AES
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>A subdirectory for each macro in your project under <code class="docutils literal notranslate"><span class="pre">openlane/</span></code> directory, each subdirectory should include openlane configuration files for the macro.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>openlane/AES
+touch<span class="w"> </span>openlane/AES/config.json
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<p>The <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file required for the execution of the RTL-to-GDSII flow for the DES algorithm encompasses the following crucial settings:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w"> </span><span class="s2">&quot;DESIGN_NAME&quot;</span>:<span class="w"> </span><span class="s2">&quot;aes&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;VERILOG_FILES&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/defines.v&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/AES/*.v&quot;</span>
+<span class="w"> </span><span class="o">]</span>,
+<span class="w"> </span><span class="s2">&quot;ROUTING_CORES&quot;</span>:<span class="w"> </span><span class="m">24</span>,
+<span class="w"> </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span>:<span class="w"> </span><span class="m">25</span>,
+<span class="w"> </span><span class="s2">&quot;CLOCK_PORT&quot;</span>:<span class="w"> </span><span class="s2">&quot;clk&quot;</span>,
+
+<span class="w"> </span><span class="s2">&quot;MAX_TRANSITION_CONSTRAINT&quot;</span>:<span class="w"> </span><span class="m">1</span>.5,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VPITCH&quot;</span>:<span class="w"> </span><span class="m">180</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HPITCH&quot;</span>:<span class="w"> </span><span class="m">180</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VOFFSET&quot;</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HOFFSET&quot;</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w"> </span><span class="s2">&quot;FP_SIZING&quot;</span>:<span class="w"> </span><span class="s2">&quot;absolute&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;RT_MAX_LAYER&quot;</span>:<span class="w"> </span><span class="s2">&quot;met4&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;DIE_AREA&quot;</span>:<span class="w"> </span><span class="s2">&quot;0 0 400 400&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;VDD_NETS&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">     </span><span class="s2">&quot;vccd1&quot;</span>
+<span class="w"> </span><span class="o">]</span>,
+<span class="w"> </span><span class="s2">&quot;GND_NETS&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">     </span><span class="s2">&quot;vssd1&quot;</span>
+<span class="w"> </span><span class="o">]</span>
+
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Execute the following command to harden the AES project</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>AES
+</pre></div>
+</div>
+</div></blockquote>
+<p>Upon executing the previous command, provided everything is functioning as expected, you should encounter the message “[SUCCESS]: Flow complete”. In such a case, navigate to the directory <code class="docutils literal notranslate"><span class="pre">openlane/AES/runs/&lt;Execution_Date&gt;</span></code>. Inside this directory, you will locate the folder containing the comprehensive reports and files generated by OpenLane. Among these files, you’ll find the GDSII file, which is visually represented in Fig. 6.3, displaying the GDS representation, and the resources utilized by the AES system’s implementation.</p>
+<figure class="align-center" id="id3">
+<img alt="_images/AES.PNG" src="_images/AES.PNG" />
+<figcaption>
+<p><span class="caption-text">Fig. 6.3: GDSII file of the AES algorithm without Trojan insertion.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="aes-with-trojan-insertion">
+<h2>AES With Trojan Insertion<a class="headerlink" href="#aes-with-trojan-insertion" title="Permalink to this heading"></a></h2>
+<p>To get the layout design with the Trojan, it is imperative to establish a new directory that accommodates the files created and altered by the AI.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>verilog/rtl/AES_Trojan
+mkdir<span class="w"> </span>openlane/AES_Trojan
+touch<span class="w"> </span>openlane/AES_Trojan/config.json
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">config.json</span></code> file required for the execution of the RTL-to-GDSII flow for the AES_Trojan algorithm encompasses the following crucial settings:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
+<span class="w"> </span><span class="s2">&quot;DESIGN_NAME&quot;</span>:<span class="w"> </span><span class="s2">&quot;aes_Trojan&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;DESIGN_IS_CORE&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w"> </span><span class="s2">&quot;VERILOG_FILES&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/defines.v&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/AES_Trojan/*.v&quot;</span>
+<span class="w"> </span><span class="o">]</span>,
+<span class="w"> </span><span class="s2">&quot;ROUTING_CORES&quot;</span>:<span class="w"> </span><span class="m">24</span>,
+<span class="w"> </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span>:<span class="w"> </span><span class="m">25</span>,
+<span class="w"> </span><span class="s2">&quot;CLOCK_PORT&quot;</span>:<span class="w"> </span><span class="s2">&quot;clk&quot;</span>,
+
+<span class="w"> </span><span class="s2">&quot;MAX_TRANSITION_CONSTRAINT&quot;</span>:<span class="w"> </span><span class="m">1</span>.5,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VPITCH&quot;</span>:<span class="w"> </span><span class="m">180</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HPITCH&quot;</span>:<span class="w"> </span><span class="m">180</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VOFFSET&quot;</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HOFFSET&quot;</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w"> </span><span class="s2">&quot;FP_SIZING&quot;</span>:<span class="w"> </span><span class="s2">&quot;absolute&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;RT_MAX_LAYER&quot;</span>:<span class="w"> </span><span class="s2">&quot;met4&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;DIE_AREA&quot;</span>:<span class="w"> </span><span class="s2">&quot;0 0 650 650&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;PL_TARGET_DENSITY&quot;</span>:0.66,
+
+<span class="w"> </span><span class="s2">&quot;VDD_NETS&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">     </span><span class="s2">&quot;vccd1&quot;</span>
+<span class="w"> </span><span class="o">]</span>,
+<span class="w"> </span><span class="s2">&quot;GND_NETS&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">     </span><span class="s2">&quot;vssd1&quot;</span>
+<span class="w"> </span><span class="o">]</span>
+
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>Upon executing the previous command, provided everything is functioning as expected, you should encounter the message “[SUCCESS]: Flow complete”. In such a case, navigate to the directory <code class="docutils literal notranslate"><span class="pre">openlane/AES_Trojan/runs/&lt;Execution_Date&gt;</span></code>. Inside this directory, you will locate the folder containing the comprehensive reports and files generated by OpenLane. Among these files, you’ll find the GDSII file, which is visually represented in Fig. 6.4, displaying the GDS representation of the resources utilized by the AES_Trojan system’s implementation.</p>
+<figure class="align-center" id="id4">
+<img alt="_images/AES_T.PNG" src="_images/AES_T.PNG" />
+<figcaption>
+<p><span class="caption-text">Fig. 6.4: GDSII file of the AES algorithm with Trojan insertion.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Chapter_5_0.html" class="btn btn-neutral float-left" title="Caravel Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Chapter_6.html" class="btn btn-neutral float-right" title="Caravel Integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Emilio Baungarten.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

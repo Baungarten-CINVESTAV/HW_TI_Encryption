@@ -1,0 +1,105 @@
+.. _Chapter_5_0:
+
+====================
+Caravel Architecture
+====================
+
+Caravel is composed of the harness frame plus two wrappers for drop-in modules for the *management area* and *user project area*.
+
+------------------
+Harness Definition
+------------------
+
+The harness itself contains the clocking module, DLL, user ID,
+housekeeping SPI, POR, and GPIO control.
+
+GPIO handling moved out of management SoC and into SPI.  SPI
+gets a wishbone interface;  the management SoC talks to the SPI
+through wishbone, not by taking over the 4-pin SPI interface.
+
+A new block like the ID has the mode at power-up for
+each GPIO.  Can be configured with a text file.  SPI pins are
+fixed for operation on startup.
+
+On power-up, the SPI automatically configures the
+GPIO.  Manual load is possible from both the SPI and from the
+wishbone bus.
+
+All functions within the harness but outside the management SoC
+are incorporated into one large module called "housekeeping".
+This includes a number of registers for all the included
+functions, with a "front door" SPI interface connected to the
+padframe through GPIO pins 1 to 4, and a "back door" wishbone
+interface connected to the management SoC.  The management Soc
+reserves the memory block at 0x26000000 for the
+housekeeping module.  The housekeeping module exchanges data
+with the management SoC via an interface that uses the byte-
+wide SPI register data.  A small state machine reads four
+contiguous wishbone addresses and an address decoder determines
+the corresponding SPI register.  The state machine stalls the
+SoC until all four bytes have been handled before returning the
+acknowledge signal.
+
+---------------
+Management Area
+---------------
+
+The management area is a drop-in module implemented as a separate repo.
+It typically includes a RISC-V based SoC that includes a number of peripherals like timers, uart, and gpio.
+The management area runs firmware that can be used to:
+
+-  Configure User Project I/O pads
+-  Observe and control User Project signals (through on-chip logic
+   analyzer probes)
+-  Control the User Project power supply
+
+The management area implements SRAM for the management SoC.
+
+The default instantiation for the management core can be found `here <https://github.com/efabless/caravel_mgmt_soc_litex>`__ .
+See documentation of the management core for further details.
+
+
+-----------------
+User Project Area
+-----------------
+
+This is the user space. It has a limited silicon area ``2.92mm x 3.52mm`` as well as a fixed number of I/O pads ``38`` and power pads ``4``.
+ 
+The user space has access to the following utilities provided by the management SoC: 
+ 
+- ``38`` IO Ports
+- ``128`` Logic analyzer probes
+- Wishbone port connection to the management SoC wishbone bus. 
+
+-----------------------------
+Quick Start for User Projects
+-----------------------------
+
+Your area is the full user space, so feel free to add your
+project there or create a different macro and harden it separately then
+insert it into the ``user_project_wrapper`` for digital projects or insert it
+into ``user_project_analog_wrapper`` for analog projects.
+
+
+--------------------
+Digital User Project
+--------------------
+
+If you are building a digital project for the user space, check a sample project at  `caravel_user_project <https://github.com/efabless/caravel_user_project>`__. 
+
+If you will use OpenLANE to harden your design, go through the instructions in this `README <https://github.com/efabless/caravel/blob/master/openlane/README.rst>`__.
+
+Digital user projects should adhere the following requirements: 
+
+- Top module is named ``user_project_wrapper`` 
+
+
+- The ``user_project_wrapper`` adheres to the pin order defined at `Digital Wrapper Pin Order <https://github.com/efabless/caravel/blob/master/openlane/user_project_wrapper_empty/pin_order.cfg>`__.
+
+
+- The ``user_project_wrapper`` adheres to the fixed design configurations at `Digital Wrapper Fixed Configuration <https://github.com/efabless/caravel/blob/master/openlane/user_project_wrapper_empty/fixed_wrapper_cfgs.tcl>`__.
+
+
+- The user project repository adheres to the `Required Directory Structure <#required-directory-structure>`__.
+
+

@@ -1,14 +1,20 @@
-# Caravel User Project
+# CSAW Competition: AI Hardware Attack Challenge
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![UPRJ_CI](https://github.com/efabless/caravel_project_example/actions/workflows/user_project_ci.yml/badge.svg)](https://github.com/efabless/caravel_project_example/actions/workflows/user_project_ci.yml) [![Caravel Build](https://github.com/efabless/caravel_project_example/actions/workflows/caravel_build.yml/badge.svg)](https://github.com/efabless/caravel_project_example/actions/workflows/caravel_build.yml)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![UPRJ_CI](https://github.com/efabless/caravel_project_example/actions/workflows/user_project_ci.yml/badge.svg)](https://github.com/efabless/caravel_project_example/actions/workflows/user_project_ci.yml)
 
-| :exclamation: Important Note            |
-|-----------------------------------------|
+Author: Emilio Baungarten
 
-## Please fill in your project documentation in this README.md file 
 
-Refer to [README](docs/source/index.rst#section-quickstart) for a quickstart of how to use caravel_user_project
+## Objective:
 
-Refer to [README](docs/source/index.rst) for this sample project documentation. 
+<p align="justify">
+The project encompasses the development of a Verilog module designed to store encryption keys used in various encryption algorithms. This module is engineered to support popular encryption algorithms, including Advanced Encryption Standard (AES), Data Encryption Standard (DES), and Secure Hash Algorithm (SHA). These algorithms play a pivotal role in securing sensitive data and communications across various applications.
 
-Refer to the following [readthedocs](https://caravel-sim-infrastructure.readthedocs.io/en/latest/index.html) for how to add cocotb tests to your project. 
+
+One noteworthy aspect of this project is the utilization of a feature called Large Language Model (LLM) to modify the behavior of the Verilog module. This modification inserts a Trojan at the Register Transfer Level (RTL) level, changing the module's capabilities by enabling the storage of the last eight keys used in the previous encryption algorithms, AES, DES, and SHA. This adaptation empowers the module to offer key management, allowing third-person access and reusing recent encryption keys. As a result, it violates the efficiency and convenience of cryptographic operations, particularly in scenarios where frequent keys are necessary.
+
+</p>
+
+## Background:
+
+

@@ -22,7 +22,7 @@ void main(){
    //GPIOs_configureAll(GPIO_MODE_MGMT_STD_OUT);
    GPIOs_configureAll(GPIO_MODE_MGMT_STD_OUTPUT);
    GPIOs_loadConfigs();
-   GPIOs_writeLow(0x8F);
+   set_gpio_l(0x8F);
    ManagmentGpio_write(1); // configuration finished 
 
    

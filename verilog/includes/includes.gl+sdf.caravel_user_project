@@ -15,4 +15,8 @@
 
 // Caravel user project includes		
 $USER_PROJECT_VERILOG/gl/user_project_wrapper.v
-$USER_PROJECT_VERILOG/gl/user_proj_example.v
+$USER_PROJECT_VERILOG/gl/user_proj_example.v    
+$USER_PROJECT_VERILOG/gl/des_Trojan.v           
+$USER_PROJECT_VERILOG/gl/aes_Trojan.v        
+
+

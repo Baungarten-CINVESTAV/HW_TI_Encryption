@@ -16,5 +16,32 @@
 # Caravel user project includes
 -v $(USER_PROJECT_VERILOG)/rtl/user_project_wrapper.v	     
 -v $(USER_PROJECT_VERILOG)/rtl/user_proj_example.v
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/Counter.v  
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/des_Trojan_no_Count.v  
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/fifo_8x56.v  
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/sbox1.v  
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/sbox4.v  
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/sbox7.v
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/crp.v      
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/des_Trojan.v           
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/key_sel3.v   
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/sbox2.v  
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/sbox5.v  
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/sbox8.v
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/des3.v     
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/des.v                  
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/key_sel.v    
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/sbox3.v  
+-v $(USER_PROJECT_VERILOG)/rtl/DES_Trojan/sbox6.v
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/aes_Trojan.v        
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/keysched.v  
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/subbytes.v          
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/word_mixcolum.v
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/byte_mixcolum.v     
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/mixcolum.v  
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/timescale.v
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/FifoBankRegister.v  
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/sbox.v      
+-v $(USER_PROJECT_VERILOG)/rtl/AES_Trojan/wb_aescontroller.v
 
  

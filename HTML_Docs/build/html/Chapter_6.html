@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caravel Integration &mdash; HW Trojan Insertion in Encryption Algorithms with LLM 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=359c27e9"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="From RTL to GDSII" href="Chapter_5.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HW Trojan Insertion in Encryption Algorithms with LLM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Chapter_1.html">CSAW Competition: AI Hardware Attack Challenge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_2.html">Objective</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_3.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4.html">Hardware Trojan Insertion with LLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_2.html">DES LLM conversation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_3.html">AES LLM conversation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_5_0.html">Caravel Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_5.html">From RTL to GDSII</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Caravel Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-full-chip-simulation">Running Full Chip Simulation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simulation">Simulation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-your-design-to-the-wrapper">Adding your design to the wrapper</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#placement-macro">Placement macro</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-the-wrapper">Building the wrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-gate-level-full-chip-simulation">Running Gate-Level Full Chip Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trojan-insertion-testbench">Trojan insertion testbench</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HW Trojan Insertion in Encryption Algorithms with LLM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Caravel Integration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Chapter_6.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="caravel-integration">
+<span id="chapter-6"></span><h1>Caravel Integration<a class="headerlink" href="#caravel-integration" title="Permalink to this heading"></a></h1>
+<p>For seamless integration of the AES_Trojan and DES_Trojan with Caravel, the preferred method is to employ the Wishbone interface. Three registers have been developed to facilitate this integration:</p>
+<ol class="arabic simple">
+<li><p><strong>Data Register</strong>: This register stores the data that is to be encrypted, with addresses ranging from 0x3000_0000 to 0x3000_000C.</p></li>
+<li><p><strong>Key Register</strong>: The Key Register holds the encryption key to be used, with addresses spanning from 0x3000_0010 to 0x3000_001C.</p></li>
+<li><p><strong>Output Register</strong>: The Output Register is responsible for storing the final output once the encryption algorithm has completed, and its addresses fall within the range of 0x3000_0020 to 0x3000_002C.</p></li>
+</ol>
+<p>Given that Caravel’s Wishbone interface operates with 32-bit data, each register is associated with 4 consecutive addresses.</p>
+<p>To manage the multiplexers, initiate encryption, and make decisions regarding encryption or decryption, specific signals from the logic analyzer are employed:</p>
+<ul class="simple">
+<li><p><strong>la_data_in[0]</strong>: This signal is utilized as a multiplexer selector, with the value 0 representing DES and 1 representing AES.</p></li>
+<li><p><strong>la_data_in[1]</strong>: It serves as the encryption/decryption selector for DES, where 0 indicates encryption and 1 signifies decryption.</p></li>
+<li><p><strong>la_data_in[2]</strong>: This signal is used to initiate the DES encryption process.</p></li>
+<li><p><strong>la_data_out[3]</strong>: It indicates the completion of the DES encryption.</p></li>
+<li><p><strong>la_data_in[4]</strong>: This signal acts as the encryption/decryption selector for DES, with 0 denoting encryption and 1 representing decryption.</p></li>
+<li><p><strong>la_data_in[5]</strong>: This signal initiates the DES encryption process.</p></li>
+<li><p><strong>la_data_out[6]</strong>: It signals the completion of the DES encryption.</p></li>
+</ul>
+<p>These signals play a critical role in managing the encryption and decryption processes and ensuring that the Trojans are integrated effectively with the Caravel platform.</p>
+<p>Fig. 7.1 illustrates the connection between the Caravel platform and the crypto modules.</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="_images/Caravel_Diagram.png"><img alt="_images/Caravel_Diagram.png" src="_images/Caravel_Diagram.png" style="width: 738.24px; height: 652.8000000000001px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 7.1: Caravel Block Diagram.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<section id="running-full-chip-simulation">
+<h2>Running Full Chip Simulation<a class="headerlink" href="#running-full-chip-simulation" title="Permalink to this heading"></a></h2>
+<p>You can locate the <cite>user_project_wrapper</cite> Verilog file with the specified modifications in the directory path: <code class="docutils literal notranslate"><span class="pre">verilog/rtl/user_project_wrapper.v</span></code>. For a comprehensive testbench of the Caravel system, Caravel provides a convenient and straightforward method to achieve this.</p>
+<p>First, you will need to install the simulation environment, by</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>simenv
+</pre></div>
+</div>
+<p>This will pull a docker image with the needed tools installed.</p>
+<p>Then, run the RTL simulation by</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PDK_ROOT</span><span class="o">=</span>&lt;pdk-installation-path&gt;
+make<span class="w"> </span>verify-&lt;testbench-name&gt;-rtl
+
+<span class="c1"># For example</span>
+make<span class="w"> </span>verify-io_ports-rtl
+</pre></div>
+</div>
+<p>Once you have the physical implementation done and you have the gate-level netlists ready, it is crucial to run full gate-level simulations to make sure that your design works as intended after running the physical implementation.</p>
+<p>Run the gate-level simulation by:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PDK_ROOT</span><span class="o">=</span>&lt;pdk-installation-path&gt;
+make<span class="w"> </span>verify-&lt;testbench-name&gt;-gl
+
+<span class="c1"># For example</span>
+make<span class="w"> </span>verify-io_ports-gl
+</pre></div>
+</div>
+<section id="simulation">
+<h3>Simulation<a class="headerlink" href="#simulation" title="Permalink to this heading"></a></h3>
+<p>To ensure accurate simulation, it is essential to create the C++ code that the RISC-V processor will use. The following code was utilized for this simulation:</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="c1">// This include is relative to $CARAVEL_PATH (see Makefile)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;defs.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stub.c&gt;</span>
+
+<span class="cm">/*</span>
+<span class="cm">     Wishbone Test:</span>
+<span class="cm">             - Configures MPRJ lower 8-IO pins as outputs</span>
+<span class="cm">             - Checks counter value through the wishbone port</span>
+<span class="cm">*/</span>
+
+<span class="cp">#define i_Key_ADDR_0   (*(volatile uint32_t*)0x30000000)</span>
+<span class="cp">#define i_Key_ADDR_1   (*(volatile uint32_t*)0x30000004)</span>
+<span class="cp">#define i_Key_ADDR_2   (*(volatile uint32_t*)0x30000008)</span>
+<span class="cp">#define i_Key_ADDR_3   (*(volatile uint32_t*)0x3000000C)</span>
+<span class="cp">#define i_Data_ADDR_0   (*(volatile uint32_t*)0x30000010)</span>
+<span class="cp">#define i_Data_ADDR_1   (*(volatile uint32_t*)0x30000014)</span>
+<span class="cp">#define i_Data_ADDR_2   (*(volatile uint32_t*)0x30000018)</span>
+<span class="cp">#define i_Data_ADDR_3   (*(volatile uint32_t*)0x3000001C)</span>
+<span class="cp">#define o_Data_ADDR_0   (*(volatile uint32_t*)0x30000020)</span>
+<span class="cp">#define o_Data_ADDR_1   (*(volatile uint32_t*)0x30000024)</span>
+<span class="cp">#define o_Data_ADDR_2   (*(volatile uint32_t*)0x30000028)</span>
+<span class="cp">#define o_Data_ADDR_3   (*(volatile uint32_t*)0x3000002C)</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+
+<span class="w">     </span><span class="cm">/*</span>
+<span class="cm">     IO Control Registers</span>
+<span class="cm">     | DM     | VTRIP | SLOW  | AN_POL | AN_SEL | AN_EN | MOD_SEL | INP_DIS | HOLDH | OEB_N | MGMT_EN |</span>
+<span class="cm">     | 3-bits | 1-bit | 1-bit | 1-bit  | 1-bit  | 1-bit | 1-bit   | 1-bit   | 1-bit | 1-bit | 1-bit   |</span>
+<span class="cm">     Output: 0000_0110_0000_1110  (0x1808) = GPIO_MODE_USER_STD_OUTPUT</span>
+<span class="cm">     | DM     | VTRIP | SLOW  | AN_POL | AN_SEL | AN_EN | MOD_SEL | INP_DIS | HOLDH | OEB_N | MGMT_EN |</span>
+<span class="cm">     | 110    | 0     | 0     | 0      | 0      | 0     | 0       | 1       | 0     | 0     | 0       |</span>
+
+
+<span class="cm">     Input: 0000_0001_0000_1111 (0x0402) = GPIO_MODE_USER_STD_INPUT_NOPULL</span>
+<span class="cm">     | DM     | VTRIP | SLOW  | AN_POL | AN_SEL | AN_EN | MOD_SEL | INP_DIS | HOLDH | OEB_N | MGMT_EN |</span>
+<span class="cm">     | 001    | 0     | 0     | 0      | 0      | 0     | 0       | 0       | 0     | 1     | 0       |</span>
+<span class="cm">     */</span>
+
+<span class="w">     </span><span class="cm">/* Set up the housekeeping SPI to be connected internally so    */</span>
+<span class="w">     </span><span class="cm">/* that external pin changes don&#39;t affect it.                   */</span>
+
+
+<span class="w"> </span><span class="n">reg_spi_enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_wb_enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">     </span><span class="c1">// reg_spimaster_config = 0xa002;       // Enable, prescaler = 2,</span>
+<span class="w">                                     </span><span class="c1">// connect to housekeeping SPI</span>
+
+<span class="w">     </span><span class="c1">// Connect the housekeeping SPI to the SPI master</span>
+<span class="w">     </span><span class="c1">// so that the CSB line is not left floating.  This allows</span>
+<span class="w">     </span><span class="c1">// all of the GPIO pins to be used for user functions.</span>
+
+<span class="w"> </span><span class="n">reg_mprj_io_31</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_30</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_29</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_28</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_27</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_26</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_25</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_24</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_23</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_22</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_21</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_20</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_19</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_18</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_17</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w"> </span><span class="n">reg_mprj_io_16</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+
+<span class="w">  </span><span class="cm">/* Apply configuration */</span>
+<span class="w"> </span><span class="n">reg_mprj_xfer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">reg_mprj_xfer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">     </span><span class="c1">//LA 0 = inputs to the cpu, 1 outputs from the cpu</span>
+<span class="w">     </span><span class="n">reg_la0_oenb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reg_la0_iena</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000037</span><span class="p">;</span><span class="w">    </span><span class="c1">// LA[3:0] = 0111; &amp; LA[7:4] = 0011;</span>
+
+<span class="w">     </span><span class="c1">// Flag start of the test</span>
+<span class="w">     </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xAB600000</span><span class="p">;</span>
+
+<span class="w">     </span><span class="c1">// Key init values</span>
+<span class="w">     </span><span class="n">i_Key_ADDR_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span>
+<span class="w">     </span><span class="n">i_Key_ADDR_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span><span class="w"> </span><span class="c1">// kEY = 0x000000000000FFFF</span>
+<span class="w">     </span><span class="c1">// Data init values</span>
+<span class="w">     </span><span class="n">i_Data_ADDR_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="p">;</span>
+<span class="w">     </span><span class="n">i_Data_ADDR_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="p">;</span><span class="w"> </span><span class="c1">// DATA = 0x00000000FFFFFFFF</span>
+
+
+<span class="w">     </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000004</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=1,decrypt=0,Mux=DES(0)</span>
+<span class="w">     </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=0</span>
+<span class="w">     </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">reg_la0_data_in</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="mh">0x00000008</span><span class="p">)</span><span class="w">  </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">//Wait for the finish signal</span>
+<span class="w">     </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xff100000</span><span class="p">;</span><span class="w">             </span><span class="c1">//Control flag</span>
+<span class="w">     </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">o_Data_ADDR_0</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0x150E2451</span><span class="p">));</span><span class="w"> </span><span class="c1">//If the encryption is correct, it can continue</span>
+<span class="w">     </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xff200000</span><span class="p">;</span><span class="w">             </span><span class="c1">//Control flag</span>
+<span class="w">     </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">o_Data_ADDR_1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0x355550B2</span><span class="p">));</span><span class="w"> </span><span class="c1">//If the encryption is correct, it can continue</span>
+<span class="w">     </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xff300000</span><span class="p">;</span><span class="w">             </span><span class="c1">//Control flag</span>
+
+<span class="w">     </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000021</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=1,decrypt=0,Mux=AES(1)</span>
+<span class="w">     </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000001</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=0</span>
+
+<span class="w">     </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">reg_la0_data_in</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="mh">0x00000040</span><span class="p">)</span><span class="w">  </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">//Wait for the finish signal of AES</span>
+<span class="w">     </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xff400000</span><span class="p">;</span><span class="w">             </span><span class="c1">//Control flag</span>
+<span class="w">     </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">o_Data_ADDR_0</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0xdb0909bc</span><span class="p">));</span><span class="w"> </span><span class="c1">//If the encryption is correct, it can continue</span>
+<span class="w">     </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xff500000</span><span class="p">;</span><span class="w">             </span><span class="c1">//Control flag</span>
+<span class="w">     </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">o_Data_ADDR_1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0x4e615668</span><span class="p">));</span><span class="w"> </span><span class="c1">//If the encryption is correct, it can continue</span>
+<span class="w">     </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xff600000</span><span class="p">;</span><span class="w">             </span><span class="c1">//Control flag</span>
+<span class="w">     </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">o_Data_ADDR_2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0x7e59fa9e</span><span class="p">));</span><span class="w"> </span><span class="c1">//If the encryption is correct, it can continue</span>
+<span class="w">     </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xff700000</span><span class="p">;</span><span class="w">             </span><span class="c1">//Control flag</span>
+<span class="w">     </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">o_Data_ADDR_3</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0x747cb926</span><span class="p">));</span><span class="w"> </span><span class="c1">//If the encryption is correct, it can continue</span>
+<span class="w">     </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xff800000</span><span class="p">;</span><span class="w">             </span><span class="c1">//Control flag</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can find detailed information regarding the testbench in the “wb_port” folder located at <code class="docutils literal notranslate"><span class="pre">verilog/dv/wb_port</span></code>.</p>
+<p>To execute the testbench run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>verify-wb_port-rtl
+</pre></div>
+</div>
+<p>Following the execution of the testbench, you will discover the wave simulation, typically saved in a VCD file format. This VCD file can be found within the <code class="docutils literal notranslate"><span class="pre">verilog/dv/wb_port</span></code> folder, Fig. 7.2 show the User_Project_Wrapper signals.</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="_images/TB_Caravel1.png"><img alt="_images/TB_Caravel1.png" src="_images/TB_Caravel1.png" style="width: 700.0px; height: 355.59999999999997px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 7.2: As shown in the image, color-coded signals enhance visualization: Yellow represents AES I/O, Orange depicts DES I/O, Purple indicates Data/Key/Output registers, Green signifies Wishbone signals, and Red marks GPIO ports.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Notice the alignment of GPIO ports with values provided by the RISC-V processor when encryption matches the expected encrypted value. This synchronization demonstrates the correct functioning of the encryption process.</p>
+</section>
+</section>
+<section id="adding-your-design-to-the-wrapper">
+<h2>Adding your design to the wrapper<a class="headerlink" href="#adding-your-design-to-the-wrapper" title="Permalink to this heading"></a></h2>
+<p>After building your design you can add it to <code class="docutils literal notranslate"><span class="pre">user_project_wrapper</span></code>, which takes the <code class="docutils literal notranslate"><span class="pre">.gds</span></code> and <code class="docutils literal notranslate"><span class="pre">.lef</span></code> files you produced by building your design. To achieve this, we need to adjust a few configuration options in <code class="docutils literal notranslate"><span class="pre">user_project_wrapper/config.tcl</span></code>:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">{</span>
+<span class="w"> </span><span class="s2">&quot;DESIGN_NAME&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;user_project_wrapper&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;VERILOG_FILES&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">[</span>
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/defines.v&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/user_project_wrapper.v&quot;</span>
+<span class="w"> </span><span class="k">]</span>,
+<span class="w"> </span><span class="s2">&quot;ROUTING_CORES&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">24</span>,
+<span class="w"> </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">25</span>,
+<span class="w"> </span><span class="s2">&quot;CLOCK_PORT&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;wb_clk_i&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;//CLOCK_NET&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">[</span><span class="s2">&quot;aes_Trojan.clk&quot;</span>,<span class="s2">&quot;des_Trojan.clk&quot;</span><span class="k">]</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_MACRO_HOOKS&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;des_Trojan vccd1 vssd1 vccd1 vssd1, aes_Trojan vccd1 vssd1 vccd1 vssd1&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;MACRO_PLACEMENT_CFG&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;dir::macro.cfg&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;VERILOG_FILES_BLACKBOX&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">[</span>
+<span class="w">     </span><span class="s2">&quot;dir::../../verilog/rtl/AES_Trojan/*.v&quot;</span>,
+<span class="w">      </span><span class="s2">&quot;dir::../../verilog/rtl/DES_Trojan/*.v&quot;</span>
+<span class="w"> </span><span class="k">]</span>,
+
+<span class="w"> </span><span class="s2">&quot;EXTRA_LEFS&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">[</span><span class="s2">&quot;dir::../../lef/aes_Trojan.lef&quot;</span>,<span class="s2">&quot;dir::../../lef/des_Trojan.lef&quot;</span><span class="k">]</span>,
+<span class="w"> </span><span class="s2">&quot;EXTRA_GDS_FILES&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">[</span><span class="s2">&quot;dir::../../gds/aes_Trojan.gds&quot;</span>,<span class="s2">&quot;dir::../../gds/des_Trojan.gds&quot;</span><span class="k">]</span>,
+<span class="w"> </span><span class="s2">&quot;EXTRA_LIBS&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">[</span><span class="s2">&quot;dir::../../lib/aes_Trojan.lib&quot;</span>,<span class="s2">&quot;dir::../../lib/des_Trojan.lib&quot;</span><span class="k">]</span>,
+<span class="w"> </span><span class="s2">&quot;//EXTRA_SPEFS&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">[</span>
+<span class="w">     </span><span class="s2">&quot;user_proj_example&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../spef/multicorner/user_proj_example.min.spef&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../spef/multicorner/user_proj_example.nom.spef&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;dir::../../spef/multicorner/user_proj_example.max.spef&quot;</span>
+<span class="w"> </span><span class="k">]</span>,
+<span class="w"> </span><span class="s2">&quot;BASE_SDC_FILE&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;dir::base_user_project_wrapper.sdc&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;RUN_LINTER&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">0</span>,
+<span class="w"> </span><span class="s2">&quot;QUIT_ON_SYNTH_CHECKS&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">0</span>,
+<span class="w"> </span><span class="s2">&quot;IO_SYNC&quot;</span><span class="o">:</span><span class="nv">0</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VPITCH&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">180</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HPITCH&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">180</span>,
+
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VOFFSET&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">5</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HOFFSET&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">5</span>,
+
+<span class="w"> </span><span class="s2">&quot;FP_SIZING&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;absolute&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;SYNTH_USE_PG_PINS_DEFINES&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;USE_POWER_PINS&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;VDD_NETS&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">[</span>
+<span class="w">     </span><span class="s2">&quot;vccd1&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;vccd2&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;vdda1&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;vdda2&quot;</span>
+<span class="w"> </span><span class="k">]</span>,
+<span class="w"> </span><span class="s2">&quot;GND_NETS&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">[</span>
+<span class="w">     </span><span class="s2">&quot;vssd1&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;vssd2&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;vssa1&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;vssa2&quot;</span>
+<span class="w"> </span><span class="k">]</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VPITCH&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">180</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HPITCH&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">180</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VOFFSET&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">5</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HOFFSET&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">5</span>,
+<span class="w"> </span><span class="s2">&quot;UNIT&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">2.4</span>,
+<span class="w"> </span><span class="s2">&quot;FP_IO_VEXTEND&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;expr::2 * $UNIT&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;FP_IO_HEXTEND&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;expr::2 * $UNIT&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;FP_IO_VLENGTH&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;expr::$UNIT&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;FP_IO_HLENGTH&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;expr::$UNIT&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;FP_IO_VTHICKNESS_MULT&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">4</span>,
+<span class="w"> </span><span class="s2">&quot;FP_IO_HTHICKNESS_MULT&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">4</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_CORE_RING&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">1</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_CORE_RING_VWIDTH&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">3.1</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_CORE_RING_HWIDTH&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">3.1</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_CORE_RING_VOFFSET&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">12.45</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_CORE_RING_HOFFSET&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">12.45</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_CORE_RING_VSPACING&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">1.7</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_CORE_RING_HSPACING&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">1.7</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VWIDTH&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">3.1</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HWIDTH&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">3.1</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_VSPACING&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;expr::(5 * $FP_PDN_CORE_RING_VWIDTH)&quot;</span>,
+<span class="w"> </span><span class="s2">&quot;FP_PDN_HSPACING&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;expr::(5 * $FP_PDN_CORE_RING_HWIDTH)&quot;</span>,
+
+
+<span class="w"> </span><span class="s2">&quot;pdk::sky130*&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">{</span>
+<span class="w">     </span><span class="s2">&quot;RT_MAX_LAYER&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;met4&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;DIE_AREA&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0 0 2920 3520&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;FP_DEF_TEMPLATE&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;dir::fixed_dont_change/user_project_wrapper.def&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;scl::sky130_fd_sc_hd&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">{</span>
+<span class="w">         </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">25</span>
+<span class="w">     </span><span class="k">}</span>,
+<span class="w">     </span><span class="s2">&quot;scl::sky130_fd_sc_hdll&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">{</span>
+<span class="w">         </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">10</span>
+<span class="w">     </span><span class="k">}</span>,
+<span class="w">     </span><span class="s2">&quot;scl::sky130_fd_sc_hs&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">{</span>
+<span class="w">         </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">8</span>
+<span class="w">     </span><span class="k">}</span>,
+<span class="w">     </span><span class="s2">&quot;scl::sky130_fd_sc_ls&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">{</span>
+<span class="w">         </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">10</span>,
+<span class="w">         </span><span class="s2">&quot;SYNTH_MAX_FANOUT&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">5</span>
+<span class="w">     </span><span class="k">}</span>,
+<span class="w">     </span><span class="s2">&quot;scl::sky130_fd_sc_ms&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">{</span>
+<span class="w">         </span><span class="s2">&quot;CLOCK_PERIOD&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">10</span>
+<span class="w">     </span><span class="k">}</span>
+<span class="w"> </span><span class="k">}</span>,
+<span class="w"> </span><span class="s2">&quot;pdk::gf180mcuC&quot;</span><span class="o">:</span><span class="w"> </span><span class="k">{</span>
+<span class="w">     </span><span class="s2">&quot;STD_CELL_LIBRARY&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;gf180mcu_fd_sc_mcu7t5v0&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;FP_PDN_CHECK_NODES&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">0</span>,
+<span class="w">     </span><span class="s2">&quot;FP_PDN_ENABLE_RAILS&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">0</span>,
+<span class="w">     </span><span class="s2">&quot;RT_MAX_LAYER&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Metal4&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;DIE_AREA&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;0 0 3000 3000&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;FP_DEF_TEMPLATE&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;dir::fixed_dont_change/user_project_wrapper_gf180mcu.def&quot;</span>,
+<span class="w">     </span><span class="s2">&quot;PL_OPENPHYSYN_OPTIMIZATIONS&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">0</span>,
+<span class="w">     </span><span class="s2">&quot;DIODE_INSERTION_STRATEGY&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">0</span>,
+<span class="w">     </span><span class="s2">&quot;MAGIC_WRITE_FULL_LEF&quot;</span><span class="o">:</span><span class="w"> </span><span class="nv">0</span>
+<span class="w"> </span><span class="k">}</span>
+<span class="k">}</span>
+</pre></div>
+</div>
+<section id="placement-macro">
+<h3>Placement macro<a class="headerlink" href="#placement-macro" title="Permalink to this heading"></a></h3>
+<p>If your design is different in size to the example you should adjust the position, where your module will be placed inside the wrapper. This can be done in <code class="docutils literal notranslate"><span class="pre">user_project_wrapper/macro.cfg</span></code>:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">aes_Trojan</span><span class="w"> </span><span class="mi">300</span><span class="w"> </span><span class="mi">500</span><span class="w"> </span>N
+<span class="nv">des_Trojan</span><span class="w"> </span><span class="mi">300</span><span class="w"> </span><span class="mi">1500</span><span class="w"> </span>N
+</pre></div>
+</div>
+<p>In this case 300/500 specify the X/Y position of the aes_Trojan macro. The size of the wrapper can be found in <code class="docutils literal notranslate"><span class="pre">user_project_wrapper/config.tcl</span></code>, with that and the size of your design you can figure out, where you need to place your design.</p>
+</section>
+<section id="building-the-wrapper">
+<h3>Building the wrapper<a class="headerlink" href="#building-the-wrapper" title="Permalink to this heading"></a></h3>
+<p>After modifying the configuration files of the wrapper you can build it to produce a wrapper, which contains your design:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>user_project_wrapper
+</pre></div>
+</div>
+<p>Upon executing the previous command, provided everything is functioning as expected, you should encounter the message “[SUCCESS]: Flow complete”. In such a case, navigate to the directory <code class="docutils literal notranslate"><span class="pre">openlane/user_project_wrapper/runs/&lt;Execution_Date&gt;</span></code>. Inside this directory, you will locate the folder containing the comprehensive reports and files generated by OpenLane. Among these files, you’ll find the GDSII file, which is visually represented in Fig. 7.3, displaying the GDS representation.</p>
+<figure class="align-center" id="id3">
+<a class="reference internal image-reference" href="_images/Project_W.PNG"><img alt="_images/Project_W.PNG" src="_images/Project_W.PNG" style="width: 293.0px; height: 348.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 7.3: GDSII file of the user_project_wrapper.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="running-gate-level-full-chip-simulation">
+<h3>Running Gate-Level Full Chip Simulation<a class="headerlink" href="#running-gate-level-full-chip-simulation" title="Permalink to this heading"></a></h3>
+<p>To execute the gate-level testbench run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>verify-wb_port-gl
+</pre></div>
+</div>
+<p>Since the gate-level simulation employs Verilog files with SKY130 standard cells, it does not allow for the visualization of internal signals. However, the module’s correct operation is confirmed by the activation of GPIO ports when it produces the expected encryption value. This activation is a crucial indicator, as it signifies the successful termination of the while loops, as described in the provided C code.</p>
+<figure class="align-center" id="id4">
+<a class="reference internal image-reference" href="_images/Gl_SIm.png"><img alt="_images/Gl_SIm.png" src="_images/Gl_SIm.png" style="width: 702.8px; height: 212.79999999999998px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 7.4: Caravel gate-level testbench.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="trojan-insertion-testbench">
+<h3>Trojan insertion testbench<a class="headerlink" href="#trojan-insertion-testbench" title="Permalink to this heading"></a></h3>
+<p>The C code has been modified to initialize the Trojan. The new C code is presented below.</p>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="c1">// This include is relative to $CARAVEL_PATH (see Makefile)</span>
+<span class="w">     </span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;defs.h&gt;</span>
+<span class="w">     </span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stub.c&gt;</span>
+
+<span class="w">     </span><span class="cm">/*</span>
+<span class="cm">             Wishbone Test:</span>
+<span class="cm">                     - Configures MPRJ lower 8-IO pins as outputs</span>
+<span class="cm">                     - Checks counter value through the wishbone port</span>
+<span class="cm">     */</span>
+
+<span class="w">     </span><span class="cp">#define i_Key_ADDR_0   (*(volatile uint32_t*)0x30000000)</span>
+<span class="w">     </span><span class="cp">#define i_Key_ADDR_1   (*(volatile uint32_t*)0x30000004)</span>
+<span class="w">     </span><span class="cp">#define i_Key_ADDR_2   (*(volatile uint32_t*)0x30000008)</span>
+<span class="w">     </span><span class="cp">#define i_Key_ADDR_3   (*(volatile uint32_t*)0x3000000C)</span>
+<span class="w">     </span><span class="cp">#define i_Data_ADDR_0   (*(volatile uint32_t*)0x30000010)</span>
+<span class="w">     </span><span class="cp">#define i_Data_ADDR_1   (*(volatile uint32_t*)0x30000014)</span>
+<span class="w">     </span><span class="cp">#define i_Data_ADDR_2   (*(volatile uint32_t*)0x30000018)</span>
+<span class="w">     </span><span class="cp">#define i_Data_ADDR_3   (*(volatile uint32_t*)0x3000001C)</span>
+<span class="w">     </span><span class="cp">#define o_Data_ADDR_0   (*(volatile uint32_t*)0x30000020)</span>
+<span class="w">     </span><span class="cp">#define o_Data_ADDR_1   (*(volatile uint32_t*)0x30000024)</span>
+<span class="w">     </span><span class="cp">#define o_Data_ADDR_2   (*(volatile uint32_t*)0x30000028)</span>
+<span class="w">     </span><span class="cp">#define o_Data_ADDR_3   (*(volatile uint32_t*)0x3000002C)</span>
+
+<span class="w">     </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="w">     </span><span class="p">{</span>
+<span class="w">             </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="w">             </span><span class="cm">/*</span>
+<span class="cm">             IO Control Registers</span>
+<span class="cm">             | DM     | VTRIP | SLOW  | AN_POL | AN_SEL | AN_EN | MOD_SEL | INP_DIS | HOLDH | OEB_N | MGMT_EN |</span>
+<span class="cm">             | 3-bits | 1-bit | 1-bit | 1-bit  | 1-bit  | 1-bit | 1-bit   | 1-bit   | 1-bit | 1-bit | 1-bit   |</span>
+<span class="cm">             Output: 0000_0110_0000_1110  (0x1808) = GPIO_MODE_USER_STD_OUTPUT</span>
+<span class="cm">             | DM     | VTRIP | SLOW  | AN_POL | AN_SEL | AN_EN | MOD_SEL | INP_DIS | HOLDH | OEB_N | MGMT_EN |</span>
+<span class="cm">             | 110    | 0     | 0     | 0      | 0      | 0     | 0       | 1       | 0     | 0     | 0       |</span>
+
+
+<span class="cm">             Input: 0000_0001_0000_1111 (0x0402) = GPIO_MODE_USER_STD_INPUT_NOPULL</span>
+<span class="cm">             | DM     | VTRIP | SLOW  | AN_POL | AN_SEL | AN_EN | MOD_SEL | INP_DIS | HOLDH | OEB_N | MGMT_EN |</span>
+<span class="cm">             | 001    | 0     | 0     | 0      | 0      | 0     | 0       | 0       | 0     | 1     | 0       |</span>
+<span class="cm">             */</span>
+
+<span class="w">             </span><span class="cm">/* Set up the housekeeping SPI to be connected internally so    */</span>
+<span class="w">             </span><span class="cm">/* that external pin changes don&#39;t affect it.                   */</span>
+
+
+<span class="w">         </span><span class="n">reg_spi_enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_wb_enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">             </span><span class="c1">// reg_spimaster_config = 0xa002;       // Enable, prescaler = 2,</span>
+<span class="w">                                             </span><span class="c1">// connect to housekeeping SPI</span>
+
+<span class="w">             </span><span class="c1">// Connect the housekeeping SPI to the SPI master</span>
+<span class="w">             </span><span class="c1">// so that the CSB line is not left floating.  This allows</span>
+<span class="w">             </span><span class="c1">// all of the GPIO pins to be used for user functions.</span>
+
+<span class="w">         </span><span class="n">reg_mprj_io_31</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_30</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_29</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_28</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_27</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_26</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_25</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_24</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_23</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_22</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_21</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_20</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_19</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_18</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_17</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_16</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+
+<span class="w">         </span><span class="n">reg_mprj_io_15</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_14</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_13</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_12</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_11</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_9</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_7</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+<span class="w">         </span><span class="n">reg_mprj_io_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_MODE_MGMT_STD_OUTPUT</span><span class="p">;</span>
+
+<span class="w">          </span><span class="cm">/* Apply configuration */</span>
+<span class="w">         </span><span class="n">reg_mprj_xfer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">         </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">reg_mprj_xfer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">             </span><span class="c1">//LA 0 = inputs to the cpu, 1 outputs from the cpu</span>
+<span class="w">             </span><span class="n">reg_la0_oenb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reg_la0_iena</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000037</span><span class="p">;</span><span class="w">    </span><span class="c1">// LA[3:0] = 0111; &amp; LA[7:4] = 0011;</span>
+
+<span class="w">             </span><span class="c1">// Flag start of the test</span>
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xAB60000F</span><span class="p">;</span>
+
+<span class="w">             </span><span class="c1">// Key init values</span>
+<span class="w">             </span><span class="n">i_Key_ADDR_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0000FF00</span><span class="p">;</span>
+<span class="w">             </span><span class="n">i_Key_ADDR_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span><span class="w"> </span><span class="c1">// kEY = 0x0000000000000000</span>
+<span class="w">             </span><span class="c1">// Data init values</span>
+<span class="w">             </span><span class="n">i_Data_ADDR_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="p">;</span>
+<span class="w">             </span><span class="n">i_Data_ADDR_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFFFFFFFF</span><span class="p">;</span><span class="w"> </span><span class="c1">// DATA = 0x00000000FFFFFFFF</span>
+
+<span class="w">             </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000004</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=1,decrypt=0,Mux=DES(0)</span>
+<span class="w">             </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=0</span>
+
+<span class="w">             </span><span class="c1">//Trojan insertion Test DES</span>
+
+<span class="w">             </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">reg_la0_data_in</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="mh">0x00000008</span><span class="p">)</span><span class="w">  </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">//Wait for the finish signal</span>
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="o">=</span><span class="n">o_Data_ADDR_0</span><span class="p">;</span><span class="w"> </span><span class="c1">//Show the value of the resgister [31:0] //Must be 0x150E2451</span>
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="o">=</span><span class="n">o_Data_ADDR_1</span><span class="p">;</span><span class="w"> </span><span class="c1">//Show the value of the resgister [63:32] //Must be 0x355550B2</span>
+
+
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xff200000</span><span class="p">;</span>
+
+<span class="w">             </span><span class="c1">// Tring with another key</span>
+<span class="w">             </span><span class="n">i_Key_ADDR_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFFFF0000</span><span class="p">;</span>
+<span class="w">             </span><span class="n">i_Key_ADDR_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span><span class="w"> </span><span class="c1">// kEY = 0x0000000000000000</span>
+
+<span class="w">             </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000004</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=1,decrypt=0,Mux=DES(0)</span>
+<span class="w">             </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=0</span>
+
+
+<span class="w">             </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">reg_la0_data_in</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="mh">0x00000008</span><span class="p">)</span><span class="w">  </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">//Wait for the finish signal</span>
+<span class="w">             </span><span class="c1">//Expected output 0xb67a14a507e26ee6</span>
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="o">=</span><span class="n">o_Data_ADDR_0</span><span class="p">;</span><span class="w"> </span><span class="c1">//Show the value of the resgister [31:0] //Must be 0x2153c62f</span>
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="o">=</span><span class="n">o_Data_ADDR_1</span><span class="p">;</span><span class="w"> </span><span class="c1">//Show the value of the resgister [63:32] //Must be 0x59f4329f</span>
+
+
+<span class="w">             </span><span class="c1">//Trojan Activation</span>
+<span class="w">                     </span><span class="c1">// Key init values</span>
+<span class="w">             </span><span class="n">i_Key_ADDR_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x6A616E41</span><span class="p">;</span>
+<span class="w">             </span><span class="n">i_Key_ADDR_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0054726F</span><span class="p">;</span><span class="w"> </span><span class="c1">// kEY = TrojanA</span>
+<span class="w">             </span><span class="c1">// Data init values</span>
+<span class="w">             </span><span class="n">i_Data_ADDR_0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span>
+<span class="w">             </span><span class="n">i_Data_ADDR_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span><span class="w"> </span><span class="c1">// DATA = 0x0000000000000000</span>
+
+<span class="w">             </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000004</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=1,decrypt=0,Mux=DES(0)</span>
+<span class="w">             </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=0</span>
+<span class="w">             </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">reg_la0_data_in</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="mh">0x00000008</span><span class="p">)</span><span class="w">  </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">//Wait for the finish signal</span>
+
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="o">=</span><span class="n">o_Data_ADDR_0</span><span class="p">;</span><span class="w"> </span><span class="c1">//First key, must be 0x00000000</span>
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="o">=</span><span class="n">o_Data_ADDR_1</span><span class="p">;</span><span class="w"> </span><span class="c1">//First key, must be 0x00000000</span>
+
+<span class="w">             </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000004</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=1,decrypt=0,Mux=DES(0)</span>
+<span class="w">             </span><span class="n">reg_la0_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">;</span><span class="w"> </span><span class="c1">//start=0</span>
+<span class="w">             </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">reg_la0_data_in</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="mh">0x00000008</span><span class="p">)</span><span class="w">  </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">//Wait for the finish signal</span>
+
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="o">=</span><span class="n">o_Data_ADDR_0</span><span class="p">;</span><span class="w"> </span><span class="c1">//Second key, must be 0xFFFFFFFF</span>
+<span class="w">             </span><span class="n">reg_mprj_datal</span><span class="o">=</span><span class="n">o_Data_ADDR_1</span><span class="p">;</span><span class="w"> </span><span class="c1">//Second key, must be 0x00000000</span>
+
+
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For the initial test, two encryptions were performed using the DES algorithm with the following parameters:</p>
+<p><strong>Encryption 1:</strong></p>
+<ul class="simple">
+<li><p>Key 1 = 0x000000000000FF00</p></li>
+<li><p>Data 1 = 0xFFFFFFFFFFFFFFFF</p></li>
+</ul>
+<p><strong>Encryption 2:</strong></p>
+<ul class="simple">
+<li><p>Key 2 = 0x00000000FFFF0000</p></li>
+<li><p>Data 2 = 0xFFFFFFFFFFFFFFFF</p></li>
+</ul>
+<p>To activate the Trojan, a specific key and data need to be loaded:</p>
+<p><strong>Trojan Activation:</strong></p>
+<ul class="simple">
+<li><p>Key = 0x0054726F6A616E41 (TrojanA)</p></li>
+<li><p>Data = 0x0000000000000000</p></li>
+</ul>
+<p>Following the provided C code, the expected outcome is the observation of Key 1 and Key 2 in the GPIO ports, indicating the successful operation of the Trojan and its ability to manipulate the encryption process.</p>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="_images/TRojanT.png"><img alt="_images/TRojanT.png" src="_images/TRojanT.png" style="width: 707.0px; height: 80.5px;" /></a>
+<figcaption>
+<p><span class="caption-text">Fig. 7.5: Caravel gate-level testbench with Trojan activation.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Chapter_5.html" class="btn btn-neutral float-left" title="From RTL to GDSII" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Emilio Baungarten.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+    "DESIGN_NAME": "aes",
+    "VERILOG_FILES": [
+        "dir::../../verilog/rtl/defines.v",
+        "dir::../../verilog/rtl/DES/crp.v ",  
+	"dir::../../verilog/rtl/AES/*.v"
+    ],
+    "ROUTING_CORES": 24,
+    "CLOCK_PERIOD": 25,
+    "CLOCK_PORT": "clk",
+
+    "MAX_TRANSITION_CONSTRAINT": 1.5,
+    "FP_PDN_VPITCH": 180,
+    "FP_PDN_HPITCH": 180,
+    "FP_PDN_VOFFSET": 5,
+    "FP_PDN_HOFFSET": 5,
+    "FP_SIZING": "absolute",
+    "RT_MAX_LAYER": "met4",
+        "DIE_AREA": "0 0 400 400",
+    "VDD_NETS": [
+        "vccd1"
+    ],
+    "GND_NETS": [
+        "vssd1"
+    ],
+    "SYNTH_USE_PG_PINS_DEFINES": "USE_POWER_PINS"
+    
+}

@@ -30,7 +30,20 @@
  */
 
 module user_project_wrapper #(
-    parameter BITS = 32
+    parameter BITS = 32,
+    parameter   [31:0]  BASE_ADDRESS    = 32'h3000_0000,        // base address
+    parameter   [31:0]  i_Key_ADDR_0     = BASE_ADDRESS,
+    parameter   [31:0]  i_Key_ADDR_1     = i_Key_ADDR_0+4,
+    parameter   [31:0]  i_Key_ADDR_2     = i_Key_ADDR_1+4,
+    parameter   [31:0]  i_Key_ADDR_3     = i_Key_ADDR_2+4,
+    parameter   [31:0]  i_Data_ADDR_0  = i_Key_ADDR_3 + 4,
+    parameter   [31:0]  i_Data_ADDR_1  = i_Data_ADDR_0 + 4,
+    parameter   [31:0]  i_Data_ADDR_2  = i_Data_ADDR_1 + 4,
+    parameter   [31:0]  i_Data_ADDR_3  = i_Data_ADDR_2 + 4,
+    parameter   [31:0]  o_Data_ADDR_0  = i_Data_ADDR_3 + 4,
+    parameter   [31:0]  o_Data_ADDR_1  = o_Data_ADDR_0 + 4,
+    parameter   [31:0]  o_Data_ADDR_2  = o_Data_ADDR_1 + 4,
+    parameter   [31:0]  o_Data_ADDR_3  = o_Data_ADDR_2 + 4
 ) (
 `ifdef USE_POWER_PINS
     inout vdda1,	// User area 1 3.3V supply
@@ -78,45 +91,177 @@ module user_project_wrapper #(
     output [2:0] user_irq
 );
 
+/// DES signals
+wire	[63:0]	desOut;
+wire	[63:0]	desIn;
+wire	[55:0]	key;
+
+/// AES signals
+wire	[128:0]	aesOut;
+wire	[128:0]	aesIn;
+wire	[128:0]	aeskey;
 /*--------------------------------------*/
-/* User project is instantiated  here   */
+/* Wishbone interface Register control  */
 /*--------------------------------------*/
 
-user_proj_example mprj (
+reg [127:0] i_Key_D;
+reg [127:0] i_Key_Q;
+reg [127:0] i_Data_D;
+reg [127:0] i_Data_Q;
+reg [127:0] o_Data_D;
+reg [127:0] o_Data_Q;
+
+wire CE;
+reg [31:0] None_cont;
+reg [31:0] r_wb_data_out;
+reg r_wbs_ack_o;
+
+assign wbs_ack_o = r_wbs_ack_o;
+assign wbs_dat_o = r_wb_data_out;
+
+/// Register which save the input and outputs data of the Encriptors and Decriptors modules
+always@(posedge wb_clk_i)
+begin
+	if(wb_rst_i)
+	begin
+		i_Key_Q <= 128'd0;
+		i_Data_Q <= 128'd0;
+		o_Data_Q <= 128'd0;
+	end
+	else if(wbs_cyc_i)
+	begin
+		i_Key_Q <= i_Key_D;
+		i_Data_Q <= i_Data_D;
+		o_Data_Q <= o_Data_D;
+	end
+	else
+	begin
+		i_Key_Q <= i_Key_Q;
+		i_Data_Q <= i_Data_Q;
+		o_Data_Q <= o_Data_Q;
+	end
+end
+
+    // writes
+    always@*
+    begin
+       i_Key_D=i_Key_Q;
+       i_Data_D=i_Data_Q;
+	if(wbs_stb_i && wbs_cyc_i && wbs_we_i) 
+	begin
+            case(wbs_adr_i)
+		    i_Key_ADDR_0:i_Key_D[31:0]=wbs_dat_i;
+		    i_Key_ADDR_1:i_Key_D[63:32]=wbs_dat_i;
+		    i_Key_ADDR_2:i_Key_D[95:64]=wbs_dat_i;
+		    i_Key_ADDR_3:i_Key_D[127:96]=wbs_dat_i;
+		    i_Data_ADDR_0:i_Data_D[31:0]=wbs_dat_i;
+		    i_Data_ADDR_1:i_Data_D[63:32]=wbs_dat_i;
+		    i_Data_ADDR_2:i_Data_D[95:64]=wbs_dat_i;
+		    i_Data_ADDR_3:i_Data_D[127:96]=wbs_dat_i;
+		    default:None_cont=wbs_dat_i;
+            endcase
+        end
+    end
+
+
+    // reads
+    always@*
+    begin
+	    if(wbs_stb_i && wbs_cyc_i && !wbs_we_i) 
+	    begin
+		case(wbs_adr_i)
+			o_Data_ADDR_3:r_wb_data_out=o_Data_Q[127:96];
+			o_Data_ADDR_2:r_wb_data_out=o_Data_Q[95:64];
+			o_Data_ADDR_1:r_wb_data_out=o_Data_Q[63:32];
+			o_Data_ADDR_0:r_wb_data_out=o_Data_Q[31:0];
+			default:r_wb_data_out=32'd0;
+		endcase
+ 	    end
+    end
+
+    // acks
+    always@(posedge wb_clk_i) begin
+        if(wb_rst_i)
+            r_wbs_ack_o <= 0;
+        else
+            // return ack immediately
+            r_wbs_ack_o <= (wbs_stb_i && (wbs_adr_i == i_Key_ADDR_0 || wbs_adr_i == i_Key_ADDR_1 || wbs_adr_i == i_Key_ADDR_2 ||wbs_adr_i == i_Key_ADDR_3 || wbs_adr_i == i_Data_ADDR_0 || wbs_adr_i == i_Data_ADDR_1 || wbs_adr_i == i_Data_ADDR_2 || wbs_adr_i == i_Data_ADDR_3 || wbs_adr_i == o_Data_ADDR_0 || wbs_adr_i == o_Data_ADDR_1 || wbs_adr_i == o_Data_ADDR_2 || wbs_adr_i == o_Data_ADDR_3));
+    end
+    
+/*--------------------------------------*/
+/*	Mux DES/AES			*/
+/*--------------------------------------*/
+//la_data_in[0];	Mux selector 0=DES/1=AES
+//la_data_in[1];	Encrip decript DES selector | 0=encripta/1=desencriptar
+//la_data_in[2];	Start DES
+//la_data_out[3];	Finish DES
+
+always@*
+begin
+	case(la_data_in[0])
+		1'd0: //For DES
+		begin
+			o_Data_D = {64'b0,desOut};	
+
+		end
+		1'd1://For AES
+		begin
+			o_Data_D = aesOut;
+		end
+	endcase
+end
+
+// DES and register conection
+assign desIn=i_Data_Q[63:0];
+assign key=i_Key_Q[63:0];
+
+// AES and register conection
+assign aesIn=i_Data_Q;
+assign aeskey=i_Key_Q;
+/*--------------------------------------*/
+/*		DES			*/
+/*--------------------------------------*/
+
+
+des_Trojan des_Trojan(
 `ifdef USE_POWER_PINS
-	.vccd1(vccd1),	// User area 1 1.8V power
-	.vssd1(vssd1),	// User area 1 digital ground
+    .vccd1(vccd1),	// User area 1 1.8V supply
+    .vssd1(vssd1),	// User area 1 digital ground
 `endif
-
-    .wb_clk_i(wb_clk_i),
-    .wb_rst_i(wb_rst_i),
-
-    // MGMT SoC Wishbone Slave
-
-    .wbs_cyc_i(wbs_cyc_i),
-    .wbs_stb_i(wbs_stb_i),
-    .wbs_we_i(wbs_we_i),
-    .wbs_sel_i(wbs_sel_i),
-    .wbs_adr_i(wbs_adr_i),
-    .wbs_dat_i(wbs_dat_i),
-    .wbs_ack_o(wbs_ack_o),
-    .wbs_dat_o(wbs_dat_o),
-
-    // Logic Analyzer
-
-    .la_data_in(la_data_in),
-    .la_data_out(la_data_out),
-    .la_oenb (la_oenb),
-
-    // IO Pads
-
-    .io_in ({io_in[37:30],io_in[7:0]}),
-    .io_out({io_out[37:30],io_out[7:0]}),
-    .io_oeb({io_oeb[37:30],io_oeb[7:0]}),
-
-    // IRQ
-    .irq(user_irq)
+.desOut_ff(desOut),
+.desIn(desIn),
+.key(key),
+.decrypt(la_data_in[1]),
+.reset(wb_rst_i),
+.clk(wb_clk_i),
+.init(la_data_in[2]),
+.finish(la_data_out[3])
 );
+
+/*--------------------------------------*/
+/*		AES			*/
+/*--------------------------------------*/
+//la_data_in[4];	Encrip decript AES selector | 0=encripta/1=desencriptar
+//la_data_in[5];	Start AES	
+//la_data_out[6];	Finish AES
+
+aes_Trojan aes_Trojan(
+`ifdef USE_POWER_PINS
+    .vccd1(vccd1),	// User area 1 1.8V supply
+    .vssd1(vssd1),	// User area 1 digital ground
+`endif
+.clk(wb_clk_i),
+.reset(!wb_rst_i),
+.load_i(la_data_in[5]), //start
+.decrypt_i(la_data_in[4]),
+.data_i(aesIn),
+.key_i(aeskey),
+.ready_o(la_data_out[6]),
+.data_o(aesOut)
+);
+
+
+
 
 endmodule	// user_project_wrapper
 

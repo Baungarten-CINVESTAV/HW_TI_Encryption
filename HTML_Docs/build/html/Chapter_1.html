@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSAW Competition: AI Hardware Attack Challenge &mdash; HW Trojan Insertion in Encryption Algorithms with LLM 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=359c27e9"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Objective" href="Chapter_2.html" />
+    <link rel="prev" title="HW Trojan Insertion in Encryption Algorithms with LLM’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HW Trojan Insertion in Encryption Algorithms with LLM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CSAW Competition: AI Hardware Attack Challenge</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#competition-description">Competition Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#judging-criteria">Judging criteria</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_2.html">Objective</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_3.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4.html">Hardware Trojan Insertion with LLM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_2.html">DES LLM conversation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_3.html">AES LLM conversation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_5_0.html">Caravel Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_5.html">From RTL to GDSII</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_6.html">Caravel Integration</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HW Trojan Insertion in Encryption Algorithms with LLM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CSAW Competition: AI Hardware Attack Challenge</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Chapter_1.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="csaw-competition-ai-hardware-attack-challenge">
+<span id="chapter-1"></span><h1>CSAW Competition: AI Hardware Attack Challenge<a class="headerlink" href="#csaw-competition-ai-hardware-attack-challenge" title="Permalink to this heading"></a></h1>
+<section id="competition-description">
+<h2>Competition Description<a class="headerlink" href="#competition-description" title="Permalink to this heading"></a></h2>
+<p>Using generative AI (e.g. ChatGPT, Bard, or similar), you will work to insert a hardware vulnerability, such as a trojan or backdoor, into an open-source digital design of your choice (e.g. OpenTitan, Ariane, a design from OpenCores, etc.). The result must be simulatable and synthesizable, and you will need to be able to demonstrate the effects of the added security vulnerability (e.g., HW-CWE). An additional award track will be for designs which are compatible with the Efabless ChipIgnite platform (for instance, a crypto accelerator with an inserted back-door). A successful submission will need to include all the prompts and responses from the language model, a document describing both the method used for inserting the vulnerability and the method of exploiting it, and makefiles for simulating and synthesizing the design. You may instruct the AI to directly edit files or perform the edits as the AI describes. You may need to perform ‘prompt injection’. Points will be awarded for subtle yet powerful exploits, e.g., those that allow system compromise from userspace, those that leak encryption keys, etc.</p>
+</section>
+<section id="judging-criteria">
+<h2>Judging criteria<a class="headerlink" href="#judging-criteria" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Usefulness of the open-source design: More popular/more broadly applicable designs are worth more.</p></li>
+<li><p>Method for adding the vulnerability: All prompts and logs must be kept and provided, and the more that the LLM did, the better, including changing of scripts and testbenches outside the hardware design itself.</p></li>
+<li><p>The severity of the vulnerability: E.g., theoretical CVSS score.</p></li>
+<li><p>The stealth of the vulnerability: How well does it hide in the overall design? Extra points for showing that it can hide from existing security scanners/functional tests/test benches.</p></li>
+<li><p>The vulnerability demonstration: It must be possible to observe the claimed impact of your vulnerability (e.g., via simulation).</p></li>
+<li><p>All entries must be completely open-source (using Apache license or compatible) but need not fully rely on open-source platforms (e.g., you can use ModelSim, Vitis, Synopsys, etc.).</p></li>
+</ul>
+<p>More information about the CSAW “AI Hardware Attack Challenge” can be found at the following links:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.csaw.io/ai-hardware-attack-challenge">https://www.csaw.io/ai-hardware-attack-challenge</a></p></li>
+<li><p><a class="reference external" href="https://docs.google.com/document/d/1rdY2FmQ4RNywyKR_gQqXOXsVIvZ6ZU2D74iBBj8ZYRk/edit?pli=1">https://docs.google.com/document/d/1rdY2FmQ4RNywyKR_gQqXOXsVIvZ6ZU2D74iBBj8ZYRk/edit?pli=1</a></p></li>
+<li><p><a class="reference external" href="https://gist.github.com/JBlocklove/a2a8b37b60a02a8ff70e40ef3531cba1">https://gist.github.com/JBlocklove/a2a8b37b60a02a8ff70e40ef3531cba1</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="HW Trojan Insertion in Encryption Algorithms with LLM’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Chapter_2.html" class="btn btn-neutral float-right" title="Objective" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Emilio Baungarten.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
