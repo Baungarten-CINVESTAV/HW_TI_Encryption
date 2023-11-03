@@ -571,3 +571,19 @@ Following the provided C code, the expected outcome is the observation of Key 1 
       
    Fig. 7.5: Caravel gate-level testbench with Trojan activation.
 
+Final Caravel SoC
+
+As the final step, a local precheck is conducted to ensure that the system implemented in the layout aligns with the original circuit and adheres to the anticipated response times. This local verification is initiated by executing the following command:
+
+.. code:: bash
+
+    make precheck
+    make run-precheck
+
+If this verification process succeeds, the project is then uploaded to the efabless platform (https://efabless.com/). Here, the precheck is once again carried out on their servers, and subsequently, the tapeout files are generated. In Fig. 7.6, you can see the final SoC, poised and prepared for the manufacturing phase.
+
+.. figure:: images/Final_SoC.png
+   :scale: 40%
+   :align: center
+      
+   Fig. 7.6: GDSII Visualization of the Caravel SoC with encripto Trojan insertion ready for manufacturing.
