@@ -22,7 +22,8 @@ One noteworthy aspect of this project is the utilization of a feature called Lar
 
 <p align="center">
 Comprehensive documentation and a step-by-step explanation of the project's development can be accessed at the following URL: 
-  
-[https://hw-ti-encryption.readthedocs.io/en/latest/](https://hw-ti-encryption.readthedocs.io/en/latest/)
+  </p>
+  <p align="center">
+https://hw-ti-encryption.readthedocs.io/en/latest/
   
 </p>
