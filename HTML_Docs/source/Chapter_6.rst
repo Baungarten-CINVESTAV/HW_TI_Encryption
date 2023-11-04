@@ -595,7 +595,7 @@ Efabless
 
 You can locate the project on the efabless platform by visiting the following link: https://repositories.efabless.com/baungarten/HW_TI_Encryption.
 
-.. figure:: images/Prechack.png
+.. figure:: images/Prechack.PNG
    :scale: 40%
    :align: center
       
