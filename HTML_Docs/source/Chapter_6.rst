@@ -211,7 +211,7 @@ Following the execution of the testbench, you will discover the wave simulation,
    :scale: 70%
    :align: center
       
-   Fig. 7.2: As shown in the image, color-coded signals enhance visualization: Yellow represents AES I/O, Orange depicts DES I/O, Purple indicates Data/Key/Output registers, Green signifies Wishbone signals, and Red marks GPIO ports.
+   Fig. 7.2: As shown in the image, color-coded signals enhance visualization: Yellow represents AES I/O, Orange depicts DES I/O, Purple indicates Data/Key/Output registers, Green signifies Wishbone signals, and Blue marks GPIO ports.
    
 Notice the alignment of GPIO ports with values provided by the RISC-V processor when encryption matches the expected encrypted value. This synchronization demonstrates the correct functioning of the encryption process.
    
