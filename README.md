@@ -8,6 +8,8 @@ Author: Emilio Baungarten
 <img src="https://github.com/Baungarten-CINVESTAV/HW_TI_Encryption/blob/main/HTML_Docs/source/images/HardwareTrojan1.png" width=50% height=50%>
 </p>
 
+## HW Trojan Insertion in Encryption Algorithms with LLM’s
+
 ## Objective:
 
 <p align="justify">
